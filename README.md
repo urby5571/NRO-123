@@ -1,2 +1,2 @@
-# NRO-123
-Vaje nro
+Urban Zgonc
+23221335
