@@ -1,26 +1,51 @@
-% Odpri datoteko
-fid = fopen('naloga1_1.txt', 'r');
+clc;
+clear all;
 
-% Preberi prvo vrstico (ime)
-ime = fgetl(fid);
+filename = 'naloga1_1.txt';
+headerlinesIn=2;
+delimiterIn='';
 
-% Preberi drugo vrstico (število vrstic in podatkov v vsaki vrstici)
-druga_vrstica = fgetl(fid);
-stevilo_vrstic = str2double(druga_vrstica);
+podatki = importdata(filename,delimiterIn,headerlinesIn);
 
-% Ustvari prazen vektor t za shranjevanje podatkov
-t = [];
+t = podatki.data(:, 1)
 
-% Preberi podatke in jih shrani v vektor t
-for i = 1:stevilo_vrstic
-    vrstica = fgetl(fid);
-    podatki = str2num(vrstica); % pretvori vrstico v številski niz
-    t = [t; podatki]; % dodaj podatke v vektor t
+filename = 'naloga1_2.txt';
+fid = fopen(filename);
+headerline = fgetl(fid);
+P = [];
+i = 1;
+
+while ~feof(fid)
+    line = fgetl(fid);
+    if ischar(line)
+        value = str2double(line);
+        P(i) = value;
+        fprintf('%f\n',value);
+        i = i + 1;
+    end
 end
 
-% Zapri datoteko
-fclose(fid);
+figure(1);
+plot(t, P);
+xlabel('t[s]');
+ylabel('P[W]');
+title('Graf P(t)');
 
-% Prikaži rezultat
-disp('Podatki shranjeni v vektor t:');
-disp(t);
+
+if length(t) < 2
+    delta_t = 1;
+    t = delta_t * (0:length(P)-1)';
+else
+    delta_t = t(2) - t(1);
+end
+
+integral = 0;
+
+for i = 1:length(P)-1
+    integral = integral + (P(i) + P(i+1)) * delta_t / 2;
+end
+
+x = trapz(t, P);
+
+fprintf("Vrednost integrala: %f\n", integral)
+fprintf("Vrednost integrala s trapz: %f\n", x)
