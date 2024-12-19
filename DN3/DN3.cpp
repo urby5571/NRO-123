@@ -3,7 +3,7 @@
 
 // Definiramo število pi
 #ifndef M_PI
-#define M_PI 3.14159
+#define M_PI 3.14159265
 #endif
 
 // Taylorjeva vrsta
@@ -17,21 +17,20 @@ double priblizekArctan(double vrednost, int Iteracije) {
 }
 
 // Trapezna metoda
-double trapeznaMetoda(double (*funkcija)(double, int), double spodnjaMeja, double zgornjaMeja, int steviloPodintervalov, int steviloKorakov) {
-    double korak = (zgornjaMeja - spodnjaMeja) / steviloPodintervalov;
-    double integral = funkcija(spodnjaMeja, steviloKorakov) + funkcija(zgornjaMeja, steviloKorakov);
+double trapeznaMetoda(double (*funkcija)(double, int), double spodnjaMeja, double zgornjaMeja, int Podintervali, int Koraki) {
+    double korak = (zgornjaMeja - spodnjaMeja) / Podintervali;
+    double integral = funkcija(spodnjaMeja, Koraki) + funkcija(zgornjaMeja, Koraki);
 
-    for (int i = 1; i < steviloPodintervalov; i++) {
+    for (int i = 1; i < Podintervali; i++) {
         double x = spodnjaMeja + i * korak;
-        integral += 2 * funkcija(x, steviloKorakov);
+        integral += 2 * funkcija(x, Koraki);
     }
-
     return integral * korak / 2;
 }
 
-double izrazi(double x, int steviloKorakov) {
+double izrazi(double x, int Koraki) {
     double eksponent = exp(3 * x);
-    double arctanDel = priblizekArctan(x / 2, steviloKorakov);
+    double arctanDel = priblizekArctan(x / 2, Koraki);
     return eksponent * arctanDel;
 }
 
