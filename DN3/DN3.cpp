@@ -1,15 +1,11 @@
 #include <stdio.h>
 #include <math.h>
 
-// Definiramo število pi
-#ifndef M_PI
-#define M_PI 3.14159265
-#endif
 
 // Taylorjeva vrsta
-double priblizekArctan(double vrednost, int Iteracije) {
+double priblizekArctan(double vrednost, int iteracije) {
     double vsota = 0.0;
-    for (int i = 0; i < Iteracije; i++) {
+    for (int i = 0; i < iteracije; i++) {
         double clen = pow(-1, i) * pow(vrednost, 2 * i + 1) / (2 * i + 1);
         vsota += clen;
     }
@@ -17,33 +13,37 @@ double priblizekArctan(double vrednost, int Iteracije) {
 }
 
 // Trapezna metoda
-double trapeznaMetoda(double (*funkcija)(double, int), double spodnjaMeja, double zgornjaMeja, int Podintervali, int Koraki) {
-    double korak = (zgornjaMeja - spodnjaMeja) / Podintervali;
-    double integral = funkcija(spodnjaMeja, Koraki) + funkcija(zgornjaMeja, Koraki);
+double trapeznaMetoda(double (*funkcija)(double, int), double spodnjaMeja, double zgornjaMeja, int podintervali, int koraki) {
+    double korak = (zgornjaMeja - spodnjaMeja) / podintervali;
+    double integral = funkcija(spodnjaMeja, koraki) + funkcija(zgornjaMeja, koraki);
 
-    for (int i = 1; i < Podintervali; i++) {
+    for (int i = 1; i < podintervali; i++) {
         double x = spodnjaMeja + i * korak;
-        integral += 2 * funkcija(x, Koraki);
+        integral += 2 * funkcija(x, koraki);
     }
     return integral * korak / 2;
 }
 
-double izrazi(double x, int Koraki) {
+double izrazi(double x, int koraki) {
     double eksponent = exp(3 * x);
-    double arctanDel = priblizekArctan(x / 2, Koraki);
+    double arctanDel = priblizekArctan(x / 2, koraki);
     return eksponent * arctanDel;
 }
+// Definiramo število pi
+#ifndef M_PI
+#define M_PI 3.14159265
+#endif
 
 int main() {
     // Parametri za integracijo
     double spodnjaMeja = 0.0;
     double zgornjaMeja = M_PI / 4;
-    int Podintervali = 1000;
-    int Koraki = 10;
+    int podintervali = 1000;
+    int koraki = 10;
 
-    double vrednostIntegrala = trapeznaMetoda(izrazi, spodnjaMeja, zgornjaMeja, Podintervali, Koraki);
+    double vrednostInt = trapeznaMetoda(izrazi, spodnjaMeja, zgornjaMeja, podintervali, koraki);
 
-    printf("Rezultat numeriène integracije: %.15f\n", vrednostIntegrala);
+    printf("Približna vrednost numeriène integracije: %.15f\n", vrednostInt);
 
     return 0;
 }
